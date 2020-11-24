@@ -17,6 +17,7 @@ void initSetup(){
   nodelay(stdscr, TRUE);
   clearok(stdscr, TRUE);
   idlok(stdscr, TRUE);
+  curs_set(0);
   // immedok(stdscr, TRUE);  // Overkill
 
 }
@@ -80,17 +81,28 @@ void player_logic(Player *player){
       if (kbhit()){
           auto c{getch()};
           switch(c){
-              case 68:
+              case 68:  // Left arrow
                 player->move(-1);
                 break;
-              case 67:
+              case 67:  // Right arrow
                 player->move(1);
                 break;
+              case 65: // Spacebar
+                player->shoot();
+                break;
               default:
+
                 break;
           }
       } else {
         napms(10);
       }
+
+      if (player->getBullet()){
+        if (!player->getBullet()->move(-1)){
+            player->deleteBullet();
+        };
+      }
   }
+
 }
